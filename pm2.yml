@@ -1,0 +1,7 @@
+apps:
+  -script: ./prod.server.js
+    name: vue-music
+    env_production:
+      NODE_ENV: production
+      HOST:  localhost
+      PORT: 3000
