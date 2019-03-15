@@ -12,28 +12,28 @@
 </template>
 
 <script>
-export default {
-  props: {
-    radius: {
-      type: Number,
-      default: 100
+  export default {
+    props: {
+      radius: {
+        type: Number,
+        default: 100
+      },
+      percent: {
+        type: Number,
+        default: 0
+      }
     },
-    percent: {
-      type: Number,
-      default: 0
-    }
-  },
-  data () {
-    return {
-      dashArray: Math.PI * 100
-    }
-  },
-  computed: {
-    dashOffset () {
-      return this.dashArray * (1 - this.percent)
+    data () {
+      return {
+        dashArray: Math.PI * 100
+      }
+    },
+    computed: {
+      dashOffset () {
+        return this.dashArray * (1 - this.percent)
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

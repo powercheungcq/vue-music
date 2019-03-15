@@ -14,23 +14,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-export default {
-  computed: {
-    ...mapGetters(['searchHistory'])
-  },
-  methods: {
-    selectItem(word) {
-      this.$emit('selectItem', word)
+  import { mapGetters } from 'vuex'
+  export default {
+    computed: {
+      ...mapGetters(['searchHistory'])
     },
-    delItem (word) {
-      this.$emit('delSearch', word)
-    },
-    clearSearches () {
-      this.$emit('clearSearches')
+    methods: {
+      selectItem(word) {
+        this.$emit('selectItem', word)
+      },
+      delItem (word) {
+        this.$emit('delSearch', word)
+      },
+      clearSearches () {
+        this.$emit('clearSearches')
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

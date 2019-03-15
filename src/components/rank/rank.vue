@@ -18,58 +18,58 @@
 </template>
 
 <script>
-import Model from 'api/rank'
-import Scroll from 'base/scroll/scroll'
-import { playListMixin } from 'common/js/mixins.js'
-import { mapMutations } from 'vuex'
-export default {
-  components: { Scroll },
-  mixins: [ playListMixin ],
-  data () {
-    return {
-      topList: []
-    }
-  },
-  created () {
-    this._initRankList()
-  },
-  methods: {
-    handlePlaylist (list) {
-      let bottom
-      if (list.length > 0) {
-        bottom = 80
-      } else {
-        bottom = 20
+  import Model from 'api/rank'
+  import Scroll from 'base/scroll/scroll'
+  import { playListMixin } from 'common/js/mixins.js'
+  import { mapMutations } from 'vuex'
+  export default {
+    components: { Scroll },
+    mixins: [ playListMixin ],
+    data () {
+      return {
+        topList: []
       }
-      this.$refs.rlScroll.$el.style.height = `${innerHeight - 88 - bottom}px`
-      this.$refs.rlScroll.refresh()
     },
-    selectTopList (topList) {
-      this.setTopList(topList)
-      this.$router.push(`/rank/${topList.id}`)
+    created () {
+      this._initRankList()
     },
-    onImgLoad () {
-      this._setSongTitleWidth()
-    },
-    _setSongTitleWidth () {
-      if (!this.loaded) {
-        this.loaded = true
-        const list = this.$refs.songlist
-        for (let k in list) {
-          list[k].style.width = `${window.innerWidth - 160}px`
+    methods: {
+      handlePlaylist (list) {
+        let bottom
+        if (list.length > 0) {
+          bottom = 80
+        } else {
+          bottom = 20
         }
-      }
-    },
-    _initRankList () {
-      Model.getRankList().then(res => {
-        this.topList = res.data.data.topList
+        this.$refs.rlScroll.$el.style.height = `${innerHeight - 88 - bottom}px`
+        this.$refs.rlScroll.refresh()
+      },
+      selectTopList (topList) {
+        this.setTopList(topList)
+        this.$router.push(`/rank/${topList.id}`)
+      },
+      onImgLoad () {
+        this._setSongTitleWidth()
+      },
+      _setSongTitleWidth () {
+        if (!this.loaded) {
+          this.loaded = true
+          const list = this.$refs.songlist
+          for (let k in list) {
+            list[k].style.width = `${window.innerWidth - 160}px`
+          }
+        }
+      },
+      _initRankList () {
+        Model.getRankList().then(res => {
+          this.topList = res.data.data.topList
+        })
+      },
+      ...mapMutations({
+        setTopList: 'SET_TOPLIST'
       })
-    },
-    ...mapMutations({
-      setTopList: 'SET_TOPLIST'
-    })
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>

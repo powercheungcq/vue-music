@@ -37,68 +37,68 @@
 </template>
 
 <script>
-import recommendModel from 'api/recommend'
-import { SUCCESS_CODE } from 'api/config'
-import Scroll from 'base/scroll/scroll'
-import Loading from 'base/loading/loading'
-import Slider from 'base/slider/slider'
-import { playListMixin } from 'common/js/mixins'
-import { mapMutations } from 'vuex'
-export default {
-  mixins: [playListMixin],
-  components: { Slider, Scroll, Loading },
-  created () {
-    this._getRecommend()
-    this._getDiscList()
-  },
-  data () {
-    return {
-      sliders: [],
-      discList: []
-    }
-  },
-  methods: {
-    handlePlaylist (playList) {
-      if (playList.length > 0) {
-        this.$refs.scroll.$el.style.height = `${window.innerHeight - 88 - 60}px`
-      } else {
-        this.$refs.scroll.$el.style.bottom = ''
+  import recommendModel from 'api/recommend'
+  import { SUCCESS_CODE } from 'api/config'
+  import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
+  import Slider from 'base/slider/slider'
+  import { playListMixin } from 'common/js/mixins'
+  import { mapMutations } from 'vuex'
+  export default {
+    mixins: [playListMixin],
+    components: { Slider, Scroll, Loading },
+    created () {
+      this._getRecommend()
+      this._getDiscList()
+    },
+    data () {
+      return {
+        sliders: [],
+        discList: []
       }
-      this.$refs.scroll.refresh()
     },
-    selectItem (item) {
-      this.setDisc(item)
-      this.$router.push(`/recommend/${item.dissid}`)
-    },
-    _getDiscList () {
-      recommendModel.getDiscList(0, 29).then((res) => {
-        res.data.list.map((item) => {
-          const changedItem = item
-          changedItem.listennum = changedItem.listennum > 10000 ? Math.ceil(changedItem.listennum / 1000) / 10 + '万' : Math.ceil(changedItem.listennum / 100) * 100
-          return changedItem
-        })
-        this.discList = res.data.list
-      })
-    },
-    _getRecommend () {
-      recommendModel.getRecommend().then(res => {
-        if (res.code === SUCCESS_CODE) {
-          const slidersData = res.data.slider
-          this.sliders = slidersData
+    methods: {
+      handlePlaylist (playList) {
+        if (playList.length > 0) {
+          this.$refs.scroll.$el.style.height = `${window.innerHeight - 88 - 60}px`
+        } else {
+          this.$refs.scroll.$el.style.bottom = ''
         }
-      })
-    },
-    imgLoad () {
-      if (this.checkLoad) {
         this.$refs.scroll.refresh()
-        this.checkLoad = true
-      }
-    },
-    ...mapMutations({
-      setDisc: 'SET_DISC'
-    })
+      },
+      selectItem (item) {
+        this.setDisc(item)
+        this.$router.push(`/recommend/${item.dissid}`)
+      },
+      _getDiscList () {
+        recommendModel.getDiscList(0, 29).then((res) => {
+          res.data.list.map((item) => {
+            const changedItem = item
+            changedItem.listennum = changedItem.listennum > 10000 ? Math.ceil(changedItem.listennum / 1000) / 10 + '万' : Math.ceil(changedItem.listennum / 100) * 100
+            return changedItem
+          })
+          this.discList = res.data.list
+        })
+      },
+      _getRecommend () {
+        recommendModel.getRecommend().then(res => {
+          if (res.code === SUCCESS_CODE) {
+            const slidersData = res.data.slider
+            this.sliders = slidersData
+          }
+        })
+      },
+      imgLoad () {
+        if (this.checkLoad) {
+          this.$refs.scroll.refresh()
+          this.checkLoad = true
+        }
+      },
+      ...mapMutations({
+        setDisc: 'SET_DISC'
+      })
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>

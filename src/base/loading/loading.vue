@@ -8,14 +8,14 @@
 </template>
 
 <script>
-export default {
-  props: {
-    text: {
-      type: String,
-      default: '正在加载...'
+  export default {
+    props: {
+      text: {
+        type: String,
+        default: '正在加载...'
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

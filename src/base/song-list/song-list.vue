@@ -13,40 +13,40 @@
 </template>
 
 <script>
-export default {
-  props: {
-    songs: {
-      type: Array,
-      default: () => []
-    },
-    isRank: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    songDesWidth () {
-      return window.innerWidth - 60 - 55
-    }
-  },
-  methods: {
-    selectSong(item, index) {
-      this.$emit('select', item, index)
-    },
-    getRankCls (index) {
-      if (index <= 2) {
-        return `icon icon${index}`
-      } else {
-        return 'text'
+  export default {
+    props: {
+      songs: {
+        type: Array,
+        default: () => []
+      },
+      isRank: {
+        type: Boolean,
+        default: false
       }
     },
-    getRankText (index) {
-      if (index > 2) {
-        return index
+    computed: {
+      songDesWidth () {
+        return window.innerWidth - 60 - 55
+      }
+    },
+    methods: {
+      selectSong(item, index) {
+        this.$emit('select', item, index)
+      },
+      getRankCls (index) {
+        if (index <= 2) {
+          return `icon icon${index}`
+        } else {
+          return 'text'
+        }
+      },
+      getRankText (index) {
+        if (index > 2) {
+          return index
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

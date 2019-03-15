@@ -7,38 +7,38 @@
 </template>
 
 <script>
-export default {
-  props: {
-    placeholder: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      searchWord: ''
-    }
-  },
-  methods: {
-    handleClear () {
-      this.searchWord = ''
+  export default {
+    props: {
+      placeholder: {
+        type: String,
+        default: ''
+      }
     },
-    handleClick (e) {
-      e.target.focus()
+    data () {
+      return {
+        searchWord: ''
+      }
     },
-    setSearchWord(searchWord) {
-      this.searchWord = searchWord.trim()
+    methods: {
+      handleClear () {
+        this.searchWord = ''
+      },
+      handleClick (e) {
+        e.target.focus()
+      },
+      setSearchWord(searchWord) {
+        this.searchWord = searchWord.trim()
+      },
+      searching (w) {
+        this.$emit('searchWordChange', w)
+      }
     },
-    searching (w) {
-      this.$emit('searchWordChange', w)
+    created () {
+      this.$watch('searchWord', (newVal) => {
+        this.searching(newVal)
+      })
     }
-  },
-  created () {
-    this.$watch('searchWord', (newVal) => {
-      this.searching(newVal)
-    })
   }
-}
 </script>
 
 <style lang="scss" scoped>

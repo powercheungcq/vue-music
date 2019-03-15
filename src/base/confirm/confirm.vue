@@ -13,40 +13,40 @@
 </template>
 
 <script>
-export default {
-  props: {
-    text: {
-      type: String,
-      default: ''
+  export default {
+    props: {
+      text: {
+        type: String,
+        default: ''
+      },
+      cancel: {
+        type: String,
+        default: '取消'
+      },
+      confirm: {
+        type: String,
+        default: '确认'
+      }
     },
-    cancel: {
-      type: String,
-      default: '取消'
+    data () {
+      return {
+        show: false
+      }
     },
-    confirm: {
-      type: String,
-      default: '确认'
-    }
-  },
-  data () {
-    return {
-      show: false
-    }
-  },
-  methods: {
-    handleCancel () {
-      this.toggleShow()
-      this.$emit('cancel')
-    },
-    handleSure () {
-      this.toggleShow()
-      this.$emit('sure')
-    },
-    toggleShow() {
-      this.show = !this.show
+    methods: {
+      handleCancel () {
+        this.toggleShow()
+        this.$emit('cancel')
+      },
+      handleSure () {
+        this.toggleShow()
+        this.$emit('sure')
+      },
+      toggleShow() {
+        this.show = !this.show
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

@@ -31,6 +31,9 @@ export const searchListMixin = {
     }
   },
   methods: {
+    showTopTip () {
+      throw new Error('component use mixin must has showTopTip method')
+    },
     saveSearch (word) {
       this.addHistorySearch(word)
     },
@@ -40,6 +43,7 @@ export const searchListMixin = {
     },
     selectSong (song) {
       this.addSongToPlaylist(song)
+      this.showTopTip()
     },
     ...mapMutations({
       setSinger: 'SET_SINGER',

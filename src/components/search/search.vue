@@ -1,5 +1,6 @@
 <template>
     <div class="search" ref="search">
+      <top-tip ref="topTip" :text="tipMsg"></top-tip>
       <search-box @searchWordChange="updateSearchWord" :placeholder="placeholder" ref="searchBox"></search-box>
       <div class="hotkey" v-show="!searchWord">
         <h1 class="title">热门搜索</h1>
@@ -32,57 +33,61 @@
 </template>
 
 <script>
-import SearchBox from 'base/search-box/search-box'
-import hotKeyModel from 'api/hotKey'
-import { SUCCESS_CODE } from 'api/config.js'
-import { shuffle } from 'common/js/util.js'
-import SearchList from 'components/search-list/search-list'
-import SearchHistoryList from 'components/search-history-list/search-history-list'
-import Confirm from 'base/confirm/confirm'
-import { playListMixin, searchListMixin } from 'common/js/mixins.js'
-
-export default {
-  mixins: [ playListMixin, searchListMixin ],
-  components: { SearchBox, SearchList, SearchHistoryList, Confirm },
-  data() {
-    return {
-      hotKey: []
-    }
-  },
-  created () {
-    this.placeholder = '搜索歌曲、歌手'
-    this.zhida = true
-    this._initHotKey()
-  },
-  methods: {
-    handlePlaylist (playList) {
-      this.$refs.searchResult.style.bottom = playList.length > 0 ? '60px' : '0'
-      this.$refs.searchList.refresh()
+  import SearchBox from 'base/search-box/search-box'
+  import hotKeyModel from 'api/hotKey'
+  import { SUCCESS_CODE } from 'api/config.js'
+  import { shuffle } from 'common/js/util.js'
+  import SearchList from 'components/search-list/search-list'
+  import SearchHistoryList from 'components/search-history-list/search-history-list'
+  import Confirm from 'base/confirm/confirm'
+  import { playListMixin, searchListMixin } from 'common/js/mixins.js'
+  import TopTip from 'base/top-tip/top-tip'
+  export default {
+    mixins: [ playListMixin, searchListMixin ],
+    components: { SearchBox, SearchList, SearchHistoryList, Confirm, TopTip },
+    data() {
+      return {
+        hotKey: [],
+        tipMsg: '成功添加一首歌曲至播放列表.'
+      }
     },
-    handleConfirm () {
-      this.$refs.confirm.toggleShow()
+    created () {
+      this.placeholder = '搜索歌曲、歌手'
+      this.zhida = true
+      this._initHotKey()
     },
-    selectHistory (word) {
-      this._setSearchBoxWord(word)
-    },
-    setSearchWord (item) {
-      this._setSearchBoxWord(item.k)
-    },
-    updateSearchWord (word) {
-      this.searchWord = word
-    },
-    _setSearchBoxWord (word) {
-      this.$refs.searchBox.setSearchWord(word)
-    },
-    _initHotKey () {
-      hotKeyModel.getHotKey().then(res => {
-        if (res.code === SUCCESS_CODE) {
-          this.hotKey = shuffle(res.data.hotkey.slice(0, 10))
-        }
-      })
+    methods: {
+      handlePlaylist (playList) {
+        this.$refs.searchResult.style.bottom = playList.length > 0 ? '60px' : '0'
+        this.$refs.searchList.refresh()
+      },
+      handleConfirm () {
+        this.$refs.confirm.toggleShow()
+      },
+      selectHistory (word) {
+        this._setSearchBoxWord(word)
+      },
+      setSearchWord (item) {
+        this._setSearchBoxWord(item.k)
+      },
+      updateSearchWord (word) {
+        this.searchWord = word
+      },
+      showTopTip () {
+        this.$refs.topTip.show()
+      },
+      _setSearchBoxWord (word) {
+        this.$refs.searchBox.setSearchWord(word)
+      },
+      _initHotKey () {
+        hotKeyModel.getHotKey().then(res => {
+          if (res.code === SUCCESS_CODE) {
+            this.hotKey = shuffle(res.data.hotkey.slice(0, 10))
+          }
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

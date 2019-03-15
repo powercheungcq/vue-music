@@ -11,51 +11,51 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import MusicList from 'components/music-list/music-list'
-import topListModel from 'api/rank'
-import { createSong } from 'common/js/song'
-export default {
-  components: { MusicList },
-  data () {
-    return {
-      songList: []
-    }
-  },
-  computed: {
-    title () {
-      return this.topList.topTitle
-    },
-    bgImage () {
-      if (this.songList.length) {
-        return this.songList[0].image
+  import { mapGetters } from 'vuex'
+  import MusicList from 'components/music-list/music-list'
+  import topListModel from 'api/rank'
+  import { createSong } from 'common/js/song'
+  export default {
+    components: { MusicList },
+    data () {
+      return {
+        songList: []
       }
-      return ''
     },
-    ...mapGetters([
-      'topList'
-    ])
-  },
-  created () {
-    this._initTopListSongs()
-  },
-  methods: {
-    _initTopListSongs() {
-      if (!this.topList.id) {
-        this.$router.push('/rank/')
-        return
-      }
-      topListModel.getRankSongList(this.topList.id).then(res => {
-        const songlist = res.data.songlist
-        const topList = []
-        for (let k in songlist) {
-          topList.push(createSong({ musicData: songlist[k].data }))
+    computed: {
+      title () {
+        return this.topList.topTitle
+      },
+      bgImage () {
+        if (this.songList.length) {
+          return this.songList[0].image
         }
-        this.songList = topList
-      })
+        return ''
+      },
+      ...mapGetters([
+        'topList'
+      ])
+    },
+    created () {
+      this._initTopListSongs()
+    },
+    methods: {
+      _initTopListSongs() {
+        if (!this.topList.id) {
+          this.$router.push('/rank/')
+          return
+        }
+        topListModel.getRankSongList(this.topList.id).then(res => {
+          const songlist = res.data.songlist
+          const topList = []
+          for (let k in songlist) {
+            topList.push(createSong({ musicData: songlist[k].data }))
+          }
+          this.songList = topList
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

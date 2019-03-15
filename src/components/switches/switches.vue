@@ -11,23 +11,23 @@
 
 <script>
 
-export default {
-  props: {
-    switchesList: {
-      type: Array,
-      default: () => []
+  export default {
+    props: {
+      switchesList: {
+        type: Array,
+        default: () => []
+      },
+      currentIndex: {
+        type: Number,
+        default: 0
+      }
     },
-    currentIndex: {
-      type: Number,
-      default: 0
-    }
-  },
-  methods: {
-    selectItem(index) {
-      this.$emit('switch', index)
+    methods: {
+      selectItem(index) {
+        this.$emit('switch', index)
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

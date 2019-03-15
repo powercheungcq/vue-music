@@ -6,17 +6,17 @@
 </template>
 
 <script>
-export default {
-  props: {
-    content: {
-      type: String,
-      required: true
-    },
-    btn: {
-      type: String
+  export default {
+    props: {
+      content: {
+        type: String,
+        required: true
+      },
+      btn: {
+        type: String
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

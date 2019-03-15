@@ -46,7 +46,6 @@ export default {
     }
     commit(Type.SET_SEQUENCE_LIST, list)
     commit(Type.SET_CURRENT_INDEX, index)
-    commit(Type.SET_FULL_SCREEN, true)
   },
   addHistorySearch ({ commit }, word) {
     commit(Type.SET_SEARCH_HISTORY, setSearchHistory(word))

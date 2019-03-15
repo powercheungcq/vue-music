@@ -17,59 +17,59 @@
 </template>
 
 <script>
-import { prefixStyle } from 'common/js/dom'
+  import { prefixStyle } from 'common/js/dom'
 
-const progressBtnWidth = 16
-const transform = prefixStyle('transform')
-export default {
-  props: {
-    percent: {
-      type: Number,
-      default: 0
-    }
-  },
-  created () {
-    this.touches = {}
-  },
-  methods: {
-    touchStart (e) {
-      this.touches.startX = e.touches[0].pageX
-      this.touches.initiated = true
+  const progressBtnWidth = 16
+  const transform = prefixStyle('transform')
+  export default {
+    props: {
+      percent: {
+        type: Number,
+        default: 0
+      }
     },
-    touchMove (e) {
-      const newX = e.touches[0].pageX
-      this.touches.moveWidth = this.$refs.progress.clientWidth + (newX - this.touches.startX)
-      this.$refs.progressBtn.style[transform] = `translate3d(${this._getProgressWidth(this.touches.moveWidth)}px,0,0)`
+    created () {
+      this.touches = {}
     },
-    touchEnd () {
-      this.touches.initiated = false
-      this.$emit('progressClick', (this._getProgressWidth(this.touches.moveWidth) / (this.$refs.progressBar.clientWidth - progressBtnWidth)))
+    methods: {
+      touchStart (e) {
+        this.touches.startX = e.touches[0].pageX
+        this.touches.initiated = true
+      },
+      touchMove (e) {
+        const newX = e.touches[0].pageX
+        this.touches.moveWidth = this.$refs.progress.clientWidth + (newX - this.touches.startX)
+        this.$refs.progressBtn.style[transform] = `translate3d(${this._getProgressWidth(this.touches.moveWidth)}px,0,0)`
+      },
+      touchEnd () {
+        this.touches.initiated = false
+        this.$emit('progressClick', (this._getProgressWidth(this.touches.moveWidth) / (this.$refs.progressBar.clientWidth - progressBtnWidth)))
+      },
+      handleClick (e) {
+        const progressBarWidth = this.$refs.progressBar.clientWidth
+        const progressBarLeftWidth = this.$refs.progressBar.getBoundingClientRect().left
+        let x = this._getProgressWidth(e.pageX - progressBtnWidth / 2 - progressBarLeftWidth)
+        this.$emit('progressClick', x / (progressBarWidth - progressBtnWidth))
+      },
+      _getProgressWidth (val) {
+        return Math.min(Math.max(val, 0), this.$refs.progressBar.clientWidth - progressBtnWidth)
+      },
+      _setProgressBar (nPercent) {
+        if (this.percent > 0 && !this.touches.initiated) {
+          const pbWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+          const progressWidth = nPercent * pbWidth
+          const trans = this._getProgressWidth(progressWidth)
+          this.$refs.progress.style.width = `${progressWidth}px`
+          this.$refs.progressBtn.style[transform] = `translate3d(${trans}px,0,0)`
+        }
+      }
     },
-    handleClick (e) {
-      const progressBarWidth = this.$refs.progressBar.clientWidth
-      const progressBarLeftWidth = this.$refs.progressBar.getBoundingClientRect().left
-      let x = this._getProgressWidth(e.pageX - progressBtnWidth / 2 - progressBarLeftWidth)
-      this.$emit('progressClick', x / (progressBarWidth - progressBtnWidth))
-    },
-    _getProgressWidth (val) {
-      return Math.min(Math.max(val, 0), this.$refs.progressBar.clientWidth - progressBtnWidth)
-    },
-    _setProgressBar (nPercent) {
-      if (this.percent > 0 && !this.touches.initiated) {
-        const pbWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-        const progressWidth = nPercent * pbWidth
-        const trans = this._getProgressWidth(progressWidth)
-        this.$refs.progress.style.width = `${progressWidth}px`
-        this.$refs.progressBtn.style[transform] = `translate3d(${trans}px,0,0)`
+    watch: {
+      percent (newPercent) {
+        this._setProgressBar(newPercent)
       }
     }
-  },
-  watch: {
-    percent (newPercent) {
-      this._setProgressBar(newPercent)
-    }
   }
-}
 </script>
 
 <style lang="scss" scoped>

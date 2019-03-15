@@ -10,50 +10,50 @@
 </template>
 
 <script>
-import Model from 'api/singerDetail'
-import { createSong } from 'common/js/song'
-import { mapGetters } from 'vuex'
-import MusicList from 'components/music-list/music-list'
-export default {
-  components: {
-    MusicList
-  },
-  data () {
-    return {
-      singerDetail: {},
-      songList: []
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'singer'
-    ])
-  },
-  created () {
-    this._initSingerDetail()
-  },
-  methods: {
-    goBack () {
-      this.$router.history.go(-1)
+  import Model from 'api/singerDetail'
+  import { createSong } from 'common/js/song'
+  import { mapGetters } from 'vuex'
+  import MusicList from 'components/music-list/music-list'
+  export default {
+    components: {
+      MusicList
     },
-    _initSingerDetail () {
-      if (!this.singer.singer_mid) {
-        this.$router.push('/singer')
-        return
+    data () {
+      return {
+        singerDetail: {},
+        songList: []
       }
-      Model.getSingerDetail(this.singer.singer_mid).then((res) => {
-        let songList = []
-        if (res.code === 0 && res.message === 'succ') {
-          const list = res.data.list
-          for (let k in list) {
-            songList.push(createSong(list[k]))
-          }
+    },
+    computed: {
+      ...mapGetters([
+        'singer'
+      ])
+    },
+    created () {
+      this._initSingerDetail()
+    },
+    methods: {
+      goBack () {
+        this.$router.history.go(-1)
+      },
+      _initSingerDetail () {
+        if (!this.singer.singer_mid) {
+          this.$router.push('/singer')
+          return
         }
-        this.songList = songList
-      })
+        Model.getSingerDetail(this.singer.singer_mid).then((res) => {
+          let songList = []
+          if (res.code === 0 && res.message === 'succ') {
+            const list = res.data.list
+            for (let k in list) {
+              songList.push(createSong(list[k]))
+            }
+          }
+          this.songList = songList
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

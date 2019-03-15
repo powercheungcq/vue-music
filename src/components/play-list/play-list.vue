@@ -38,94 +38,94 @@
 </template>
 
 <script>
-import Scroll from 'base/scroll/scroll'
-import { playMode, playModeTxt } from 'common/js/config'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
-import Confirm from 'base/confirm/confirm'
-import AddSong from 'components/add-song/add-song'
-export default {
-  components: { Scroll, Confirm, AddSong },
-  data () {
-    return {
-      show: false
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'sequenceList',
-      'currentSong',
-      'playList',
-      'mode'
-    ]),
-    playModeTxt () {
-      return `${playModeTxt[this.mode]}播放`
-    },
-    getPlayIcon () {
-      let icon = ''
-      if (this.mode === 0) {
-        icon = 'icon-sequence'
-      } else if (this.mode === 1) {
-        icon = 'icon-loop'
-      } else {
-        icon = 'icon-random'
+  import Scroll from 'base/scroll/scroll'
+  import { playMode, playModeTxt } from 'common/js/config'
+  import { mapGetters, mapMutations, mapActions } from 'vuex'
+  import Confirm from 'base/confirm/confirm'
+  import AddSong from 'components/add-song/add-song'
+  export default {
+    components: { Scroll, Confirm, AddSong },
+    data () {
+      return {
+        show: false
       }
-      return icon
-    }
-  },
-  methods: {
-    hide () {
-      this.show = false
     },
-    showPlayList () {
-      this.show = true
-      this.$nextTick(() => {
-        this.$refs.plistScroll.refresh()
-        this._scrollToSong()
-      })
+    computed: {
+      ...mapGetters([
+        'sequenceList',
+        'currentSong',
+        'playList',
+        'mode'
+      ]),
+      playModeTxt () {
+        return `${playModeTxt[this.mode]}播放`
+      },
+      getPlayIcon () {
+        let icon = ''
+        if (this.mode === 0) {
+          icon = 'icon-sequence'
+        } else if (this.mode === 1) {
+          icon = 'icon-loop'
+        } else {
+          icon = 'icon-random'
+        }
+        return icon
+      }
     },
-    selectItem (item, index) {
-      if (this.mode === playMode.random) {
-        const list = this.playList.slice()
-        index = list.findIndex((song) => {
-          return song.songmid === this.sequenceList[index].songmid
+    methods: {
+      hide () {
+        this.show = false
+      },
+      showPlayList () {
+        this.show = true
+        this.$nextTick(() => {
+          this.$refs.plistScroll.refresh()
+          this._scrollToSong()
         })
-      }
-      if (this.playList[index].songmid === this.currentSong.songmid) {
-        return false
-      }
-      this.setCurrentIndex(index)
-    },
-    handleDel (item, index) {
-      this.delSongAtPlayList({ song: item, sequenceIndex: index })
-    },
-    clearConfirm () {
-      this.$refs.clearConfirm.toggleShow()
-    },
-    addSongShow () {
-      this.$refs.addSong.show()
-    },
-    _scrollToSong () {
-      const index = this.sequenceList.findIndex(item => item.songmid === this.currentSong.songmid)
-      this.$nextTick(() => {
-        this.$refs.plistScroll.scrollToElement(this.$refs.listSongs[index])
+      },
+      selectItem (item, index) {
+        if (this.mode === playMode.random) {
+          const list = this.playList.slice()
+          index = list.findIndex((song) => {
+            return song.songmid === this.sequenceList[index].songmid
+          })
+        }
+        if (this.playList[index].songmid === this.currentSong.songmid) {
+          return false
+        }
+        this.setCurrentIndex(index)
+      },
+      handleDel (item, index) {
+        this.delSongAtPlayList({ song: item, sequenceIndex: index })
+      },
+      clearConfirm () {
+        this.$refs.clearConfirm.toggleShow()
+      },
+      addSongShow () {
+        this.$refs.addSong.show()
+      },
+      _scrollToSong () {
+        const index = this.sequenceList.findIndex(item => item.songmid === this.currentSong.songmid)
+        this.$nextTick(() => {
+          this.$refs.plistScroll.scrollToElement(this.$refs.listSongs[index])
+        })
+      },
+      ...mapMutations({
+        setCurrentIndex: 'SET_CURRENT_INDEX',
+        setPlayMode: 'SET_PLAY_MODE'
+      }),
+      ...mapActions({
+        delSongAtPlayList: 'delSongAtPlayList',
+        changePlayMode: 'changePlayMode',
+        clearPlayList: 'clearPlayList'
       })
     },
-    ...mapMutations({
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PLAY_MODE'
-    }),
-    ...mapActions({
-      delSongAtPlayList: 'delSongAtPlayList',
-      changePlayMode: 'changePlayMode',
-      clearPlayList: 'clearPlayList'
-    })
-  },
-  watch: {
-    currentSong () {
-      this._scrollToSong()
+    watch: {
+      currentSong () {
+        this._scrollToSong()
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

@@ -10,51 +10,51 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import MusicList from 'components/music-list/music-list'
-import { getDiscList } from 'api/disc'
-import { createSong } from 'common/js/song'
-import { SUCCESS_CODE } from 'api/config'
-export default {
-  components: { MusicList },
-  data () {
-    return {
-      songList: []
-    }
-  },
-  computed: {
-    title () {
-      return this.disc.dissname
-    },
-    bgImage () {
-      return this.disc.imgurl
-    },
-    ...mapGetters([
-      'disc'
-    ])
-  },
-  created () {
-    this._initDisc(this.disc.dissid)
-  },
-  methods: {
-    _initDisc (dissid) {
-      if (!dissid) {
-        this.$router.push('/recommend/')
-        return
+  import { mapGetters } from 'vuex'
+  import MusicList from 'components/music-list/music-list'
+  import { getDiscList } from 'api/disc'
+  import { createSong } from 'common/js/song'
+  import { SUCCESS_CODE } from 'api/config'
+  export default {
+    components: { MusicList },
+    data () {
+      return {
+        songList: []
       }
-      getDiscList(dissid).then(res => {
-        if (res.data.code === SUCCESS_CODE) {
-          const list = res.data.cdlist[0].songlist
-          const newList = []
-          for (let k in list) {
-            newList.push(createSong({ musicData: list[k] }))
-          }
-          this.songList = newList
+    },
+    computed: {
+      title () {
+        return this.disc.dissname
+      },
+      bgImage () {
+        return this.disc.imgurl
+      },
+      ...mapGetters([
+        'disc'
+      ])
+    },
+    created () {
+      this._initDisc(this.disc.dissid)
+    },
+    methods: {
+      _initDisc (dissid) {
+        if (!dissid) {
+          this.$router.push('/recommend/')
+          return
         }
-      })
+        getDiscList(dissid).then(res => {
+          if (res.data.code === SUCCESS_CODE) {
+            const list = res.data.cdlist[0].songlist
+            const newList = []
+            for (let k in list) {
+              newList.push(createSong({ musicData: list[k] }))
+            }
+            this.songList = newList
+          }
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

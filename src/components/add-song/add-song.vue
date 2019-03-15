@@ -1,5 +1,6 @@
 <template>
   <div class="add-song" @click.stop v-if="showFlag">
+    <top-tip ref="topTip" :text="tipMsg"></top-tip>
     <div class="head">
       <h2 class="title">添加歌曲到列表</h2>
       <i class="icon icon-delete" @click="hide"></i>
@@ -42,67 +43,73 @@
 </template>
 
 <script>
-import SearchBox from 'base/search-box/search-box'
-import SearchList from 'components/search-list/search-list'
-import { searchListMixin } from 'common/js/mixins'
-import Switches from 'components/switches/switches'
-import SearchHistoryList from 'components/search-history-list/search-history-list'
-import SongList from 'base/song-list/song-list'
-import Scroll from 'base/scroll/scroll'
-import { mapGetters } from 'vuex'
-import Confirm from 'base/confirm/confirm'
-export default {
-  mixins: [ searchListMixin ],
-  data () {
-    return {
-      showFlag: false,
-      currentIndex: 0
-    }
-  },
-  components: {
-    SearchBox,
-    SearchList,
-    Switches,
-    SearchHistoryList,
-    SongList,
-    Scroll,
-    Confirm
-  },
-  created () {
-    this.switchesList = [
-      { name: '最近播放' },
-      { name: '搜索历史' }
-    ]
-  },
-  computed: {
-    ...mapGetters([
-      'listenHistory'
-    ])
-  },
-  methods: {
-    handleConfirm () {
-      this.$refs.confirm.toggleShow()
+  import SearchBox from 'base/search-box/search-box'
+  import SearchList from 'components/search-list/search-list'
+  import { searchListMixin } from 'common/js/mixins'
+  import Switches from 'components/switches/switches'
+  import SearchHistoryList from 'components/search-history-list/search-history-list'
+  import SongList from 'base/song-list/song-list'
+  import Scroll from 'base/scroll/scroll'
+  import { mapGetters } from 'vuex'
+  import Confirm from 'base/confirm/confirm'
+  import TopTip from 'base/top-tip/top-tip'
+  export default {
+    mixins: [ searchListMixin ],
+    data () {
+      return {
+        showFlag: false,
+        currentIndex: 0,
+        tipMsg: '成功添加一首歌曲至播放列表.'
+      }
     },
-    selectSearchHistoryItem (word) {
-      this.$refs.searchBox.setSearchWord(word)
+    components: {
+      SearchBox,
+      SearchList,
+      Switches,
+      SearchHistoryList,
+      SongList,
+      Scroll,
+      Confirm,
+      TopTip
     },
-    delSearch (word) {
-      this.delSearch()
+    created () {
+      this.switchesList = [
+        { name: '最近播放' },
+        { name: '搜索历史' }
+      ]
     },
-    switchItem (index) {
-      this.currentIndex = index
+    computed: {
+      ...mapGetters([
+        'listenHistory'
+      ])
     },
-    changeWord (word) {
-      this.searchWord = word
-    },
-    show () {
-      this.showFlag = true
-    },
-    hide () {
-      this.showFlag = false
+    methods: {
+      handleConfirm () {
+        this.$refs.confirm.toggleShow()
+      },
+      selectSearchHistoryItem (word) {
+        this.$refs.searchBox.setSearchWord(word)
+      },
+      delSearch (word) {
+        this.delSearch()
+      },
+      switchItem (index) {
+        this.currentIndex = index
+      },
+      changeWord (word) {
+        this.searchWord = word
+      },
+      show () {
+        this.showFlag = true
+      },
+      hide () {
+        this.showFlag = false
+      },
+      showTopTip () {
+        this.$refs.topTip.show()
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

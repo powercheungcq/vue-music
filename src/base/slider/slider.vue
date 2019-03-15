@@ -10,101 +10,101 @@
 </template>
 
 <script>
-import BScroll from 'better-scroll'
-import { addClass } from 'common/js/dom'
-export default {
-  props: {
-    loop: {
-      type: Boolean,
-      default: true
-    },
-    autoPlay: {
-      type: Boolean,
-      default: true
-    },
-    interval: {
-      type: Number,
-      default: 4000
-    },
-    showDots: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data () {
-    return {
-      dots: [],
-      currentPageIndex: 0
-    }
-  },
-  mounted () {
-    setTimeout(() => {
-      this._autoSetSliderItemWidth()
-      this._sliderInit()
-      if (this.showDots) {
-        this._initDots()
+  import BScroll from 'better-scroll'
+  import { addClass } from 'common/js/dom'
+  export default {
+    props: {
+      loop: {
+        type: Boolean,
+        default: true
+      },
+      autoPlay: {
+        type: Boolean,
+        default: true
+      },
+      interval: {
+        type: Number,
+        default: 4000
+      },
+      showDots: {
+        type: Boolean,
+        default: true
       }
-      if (this.autoPlay) {
-        this._play()
-      }
-    }, 20)
-    window.addEventListener('resize', () => {
-      this._autoSetSliderItemWidth(true)
-      this.slider.refresh()
-    })
-  },
-  methods: {
-    _autoSetSliderItemWidth (isResize) {
-      const iWidth = this.$refs.slider.clientWidth
-      this.childrens = this.$refs.sgroup.children
-      let sgWidth = 0
-      for (let i = 0; i < this.childrens.length; i++) {
-        const children = this.childrens[i]
-        addClass(children, 'slider-item')
-        children.style.width = iWidth + 'px'
-        sgWidth += iWidth
-      }
-      if (this.loop && !isResize) {
-        sgWidth += iWidth * 2
-      }
-      this.$refs.sgroup.style.width = sgWidth + 'px'
     },
-    _sliderInit () {
-      const sliderWrpper = this.$refs.slider
-      this.slider = new BScroll(sliderWrpper, {
-        scrollX: true,
-        scrollY: false,
-        momentum: false,
-        click: true,
-        snap: {
-          loop: this.loop,
-          threshold: 0.2,
-          speed: 400
+    data () {
+      return {
+        dots: [],
+        currentPageIndex: 0
+      }
+    },
+    mounted () {
+      setTimeout(() => {
+        this._autoSetSliderItemWidth()
+        this._sliderInit()
+        if (this.showDots) {
+          this._initDots()
         }
-      })
-      this.slider.on('scrollEnd', () => {
-        this.currentPageIndex = this.slider.getCurrentPage().pageX
         if (this.autoPlay) {
-          clearTimeout(this.timer)
           this._play()
         }
+      }, 20)
+      window.addEventListener('resize', () => {
+        this._autoSetSliderItemWidth(true)
+        this.slider.refresh()
       })
     },
-    _initDots () {
-      const tempArr = []
-      for (let i = 0; i < this.childrens.length - 2; i++) {
-        tempArr[i] = i
+    methods: {
+      _autoSetSliderItemWidth (isResize) {
+        const iWidth = this.$refs.slider.clientWidth
+        this.childrens = this.$refs.sgroup.children
+        let sgWidth = 0
+        for (let i = 0; i < this.childrens.length; i++) {
+          const children = this.childrens[i]
+          addClass(children, 'slider-item')
+          children.style.width = iWidth + 'px'
+          sgWidth += iWidth
+        }
+        if (this.loop && !isResize) {
+          sgWidth += iWidth * 2
+        }
+        this.$refs.sgroup.style.width = sgWidth + 'px'
+      },
+      _sliderInit () {
+        const sliderWrpper = this.$refs.slider
+        this.slider = new BScroll(sliderWrpper, {
+          scrollX: true,
+          scrollY: false,
+          momentum: false,
+          click: true,
+          snap: {
+            loop: this.loop,
+            threshold: 0.2,
+            speed: 400
+          }
+        })
+        this.slider.on('scrollEnd', () => {
+          this.currentPageIndex = this.slider.getCurrentPage().pageX
+          if (this.autoPlay) {
+            clearTimeout(this.timer)
+            this._play()
+          }
+        })
+      },
+      _initDots () {
+        const tempArr = []
+        for (let i = 0; i < this.childrens.length - 2; i++) {
+          tempArr[i] = i
+        }
+        this.dots = tempArr
+      },
+      _play () {
+        this.timer = setTimeout(() => {
+          this.currentPageIndex = this.currentPageIndex + 1
+          this.slider.next()
+        }, this.interval)
       }
-      this.dots = tempArr
-    },
-    _play () {
-      this.timer = setTimeout(() => {
-        this.currentPageIndex = this.currentPageIndex + 1
-        this.slider.next()
-      }, this.interval)
     }
   }
-}
 </script>
 
 <style scoped lang="scss">
